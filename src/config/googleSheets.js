@@ -1,7 +1,13 @@
 const { google } = require("googleapis");
-const path = require("path");
+
+if (!process.env.GOOGLE_SERVICE_ACCOUNT) {
+  throw new Error("GOOGLE_SERVICE_ACCOUNT is missing");
+}
 
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
+
+// Fix newline formatting for Vercel env vars
+credentials.private_key = credentials.private_key.replace(/\\n/g, "\n");
 
 const auth = new google.auth.GoogleAuth({
   credentials,
